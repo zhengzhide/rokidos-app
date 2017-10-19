@@ -1,4 +1,6 @@
 rootProject.name = 'rokidosapp'
+include ':react-native-http-bridge'
+project(':react-native-http-bridge').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-http-bridge/android')
 include ':react-native-ble-plx'
 project(':react-native-ble-plx').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-ble-plx/android')
 

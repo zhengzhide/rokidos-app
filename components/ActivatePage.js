@@ -184,7 +184,7 @@ export class ActivateDiscoveryPage extends Component {
   async onPressDeviceItem(device) {
     this._bleMgr.stopDeviceScan();
     try {
-      await device.connect();
+      await device.connect({requestMtu: 128});
       await device.discoverAllServicesAndCharacteristics();
       await device.characteristicsForService('4000');
       Actions.ActivateConfigure({
@@ -252,12 +252,12 @@ export class ActivateConfigurePage extends Component {
     try {
       const device = this.props.device;
       const result = { ssid: this.state.ssid, psk: this.state.psk };
-      const data = new Buffer(JSON.stringify(result)).toString('base64');
-      device.writeCharacteristicWithResponseForService('4000', '9745', data);
-      // redirect to homepage when networking is configured
+      let data = new Buffer(JSON.stringify(result)).toString('base64');
+      data = new Buffer(data).toString('base64');
+      await device.writeCharacteristicWithResponseForService('4000', '9745', data);
       Actions.Home();
     } catch (err) {
-      Alert.alert('配网过程出错，请重试一次，或者换一个设备再试一下');
+      Alert.alert('配网过程出错，请重试一次，或者换一个设备再试一下' + err);
     }
   }
   render() {
